@@ -1,1 +1,4 @@
 data/
+*.osm
+*.pbf
+*.zip
