@@ -23,30 +23,3 @@ for city in "${cities[@]}"; do
     docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-$city-18.csv > data/tiles-$city-18.json
     node index.js data/tiles-$city-18.geojson  data/tiles-$city-18.json > data/$city-chip-ahoy-18.geojson
 done
-
-
-# # Dar 17
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/dar.geojson --zoom=17 > data/tiles-dar-17.geojson
-# echo "image"  > data/tiles-dar-17.csv
-# aws s3 ls s3://ds-data-projects/FFDA/zoom-17/dar/tiles/ | awk '{print $4}'  >> data/tiles-dar-17.csv
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-dar-17.csv > data/tiles-dar-17.json
-# node index.js data/tiles-dar-17.geojson  data/tiles-dar-17.json > data/dar-17.geojson
-
-# # Dar 18
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/dar.geojson --zoom=18 > data/tiles-dar-18.geojson
-# echo "image"  > data/tiles-dar-18.csv
-# aws s3 ls s3://ds-data-projects/FFDA/zoom-18/dar/tiles/ | awk '{print $4}'  >> data/tiles-dar-18.csv
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-dar-18.csv > data/tiles-dar-18.json
-# node index.js data/tiles-dar-18.geojson  data/tiles-dar-18.json > data/dar-18.geojson
-
-
-# # Dar 18
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/dar.geojson --zoom=18 > data/tiles-dar-18.geojson
-# echo "image"  > data/tiles-dar-18.csv
-# aws s3 ls s3://ds-data-projects/FFDA/zoom-18/dar/tiles/ | awk '{print $4}'  >> data/tiles-dar-18.csv
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-dar-18.csv > data/tiles-dar-18.json
-# node index.js data/tiles-dar-18.geojson  data/tiles-dar-18.json > data/dar-18.geojson
-
-
-
-
