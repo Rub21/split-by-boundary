@@ -1,18 +1,24 @@
 # !/usr/bin/env bash
 path=/tmp/data
 mkdir -p $path
-osmPathFile=$1
-osmFile="$(basename -- $osmPathFile)"
-# cp $osmPathFile ${PWD}
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geojson2poly dar.json dar.poly
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmconvert $osmFile -B=dar.poly -o=clip-$osmFile
-# docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmosis --read-pbf file=clip-$osmFile --write-xml osm.osm
+pbfUrl=$1
+bbox=$2
+pbfFile="$(basename -- $pbfUrl)"
+country="${pbfFile%.*}"
+country="${country%.*}"
+# wget urlPbf
+
+echo $country
+
+# bbox to geojson
+docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit bbox2fc --bbox="$bbox" > bounduary.geojson
+docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geojson2poly bounduary.geojson bounduary.poly
+docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmconvert $pbfFile -B=bounduary.poly -o=clip-$pbfFile
+docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmosis --read-pbf file=clip-$osmFile --write-xml osm.osm
 
 # Hospitals
 docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmfilter osm.osm \
 --keep="amenity=hospital or amenity=clinic or building=hospital" > hospital.osm
-
-docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmfilter hospital.osm --out-key=amenity
 
 # University
 docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest osmfilter osm.osm \
