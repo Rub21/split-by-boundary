@@ -9,17 +9,26 @@ docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit bbox2fc
 
 cities=(dar istanbul jakarta berlin)
 for city in "${cities[@]}"; do
-   # Dar 17
-    docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/$city.geojson --zoom=17 > data/tiles-$city-17.geojson
-    echo "image"  > data/tiles-$city-17.csv
-    aws s3 ls s3://ds-data-projects/FFDA/zoom-17/$city/tiles/ | awk '{print $4}'  >> data/tiles-$city-17.csv
-    docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-$city-17.csv > data/tiles-$city-17.json
-    node index.js data/tiles-$city-17.geojson  data/tiles-$city-17.json > data/$city-chip-ahoy-17.geojson
-
-    # Dar 18
-    docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/$city.geojson --zoom=18 > data/tiles-$city-18.geojson
-    echo "image"  > data/tiles-$city-18.csv
-    aws s3 ls s3://ds-data-projects/FFDA/zoom-18/$city/tiles/ | awk '{print $4}'  >> data/tiles-$city-18.csv
-    docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest csvjson data/tiles-$city-18.csv > data/tiles-$city-18.json
-    node index.js data/tiles-$city-18.geojson  data/tiles-$city-18.json > data/$city-chip-ahoy-18.geojson
+   # Get all the tiles for the city
+    docker run --rm -v ${PWD}:/mnt/data developmentseed/geokit:latest geokit tilecover data/$city.geojson --zoom=18 > data/_tiles.geojson
+    # download labels.npz 
+    aws s3 cp s3://ds-data-projects/FFDA/zoom-18/$city/labels.npz data/
+    # split the clases, result in as a json file
+    python read.py
+    # Get the classes tiles
+    node index.js data/_tiles.geojson data/_hospital.json > data/$city-hospital-18.geojson
+    node index.js data/_tiles.geojson data/_residential.json > data/$city-residential-18.geojson
+    node index.js data/_tiles.geojson data/_sports.json > data/$city-sports-18.geojson
+    node index.js data/_tiles.geojson data/_industry.json > data/$city-industry-18.geojson
+    node index.js data/_tiles.geojson data/_commercial.json > data/$city-commercial-18.geojson
+    node index.js data/_tiles.geojson data/_transportation.json > data/$city-transportation-18.geojson
+    node index.js data/_tiles.geojson data/_government.json > data/$city-government-18.geojson
+    node index.js data/_tiles.geojson data/_place_of_worship.json > data/$city-place_of_worship-18.geojson
+    node index.js data/_tiles.geojson data/_school.json > data/$city-school-18.geojson
+    node index.js data/_tiles.geojson data/_university.json > data/$city-university-18.geojson
+    # remove files
+    rm data/_*
+    rm  data/labels.npz
+    # upload files
+    aws s3 sync data/ s3://ds-data-projects/FFDA/zoom-18/$city/classes/ --exclude "*" --include "$city-*-18.geojson"
 done
