@@ -111,7 +111,3 @@ for country in "${countries[@]}"; do
     zip $path/$country.zip $path/$country-*.osm
     rm $path/$country-*.osm
 done
- 
-
-
-

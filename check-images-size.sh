@@ -1,7 +1,7 @@
 # !/usr/bin/env bash
 path=/tmp/data
 mkdir -p $path
-BUCKET_FOLDER=s3://wbg-geography01/GEP/DRONE/SALINACRUZ/
+BUCKET_FOLDER=s3://wbg-geography01/GEP/DRONE/JUCHITAN/
 aws s3 ls $BUCKET_FOLDER | awk '{print $2}'  > $path/images.csv
 echo "folder, imagen, size, s3" > $path/results.csv
 while IFS= read -r line; do
