@@ -1,0 +1,84 @@
+{
+    "geojson": "/usr/src/app/murmansk_bbox_f.json",
+    "zoom": 18,
+    "classes": [
+        {
+            "name": "power_polygon",
+            "filter": [
+                "any",
+                [
+                    "==",
+                    "power",
+                    "tower"
+                ],
+                [
+                    "==",
+                    "tower",
+                    "pole"
+                ]
+            ]
+        },
+        {
+            "name": "power_plant",
+            "filter": [
+                "==",
+                "power",
+                "plant"
+            ]
+        },
+        {
+            "name": "power_substation",
+            "filter": [
+                "any",
+                [
+                    "==",
+                    "power",
+                    "substation"
+                ],
+                [
+                    "==",
+                    "substation",
+                    "transmission"
+                ]
+            ]
+        },
+        {
+            "name": "cooling_tower",
+            "filter": [
+                "any",
+                [
+                    "==",
+                    "man_made",
+                    "cooling_tower"
+                ],
+                [
+                    "==",
+                    "tower:type",
+                    "cooling"
+                ]
+            ]
+        },
+        {
+            "name": "communications_tower",
+            "filter": [
+                "==",
+                "man_made",
+                "communications_tower"
+            ]
+        }
+    ],
+    "imagery": "https://evwhs.digitalglobe.com/earthservice/wmtsaccess?CONNECTID=c4c0f9e5-c5c7-4fee-aea5-57a10dd1e6ad&request=GetTile&version=1.0.0&layer=DigitalGlobe:ImageryTileService&featureProfile=Global_Currency_Profile&style=default&format=image/png&TileMatrixSet=EPSG:3857&TileMatrix=EPSG:3857:{z}&TileRow={y}&TileCol={x}",
+    "background_ratio": 0.1,
+    "ml_type": "object-detection",
+    "seed": 19,
+    "split_names": [
+        "train",
+        "val",
+        "test"
+    ],
+    "split_vals": [
+        0.7,
+        0.2,
+        0.1
+    ]
+}
